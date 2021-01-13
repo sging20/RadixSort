@@ -5,4 +5,13 @@ public class Radix{
     ret= ret %10;
     return ret;
 }
+public static int length(int n){
+  int counter= 1;
+  while(n / (int) 10 != 0){
+  n= n/ (int)10;
+  counter += 1;
+  }
+  return counter;
+}
+
 }
