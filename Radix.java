@@ -65,5 +65,26 @@ public static void radixSortSimple(SortableLinkedList data){
 }
 
 
+  public static void radixSort(SortableLinkedList data){
+    SortableLinkedList negatives= new SortableLinkedList();
+    SortableLinkedList positives= new SortableLinkedList();
+    for(int i=0; i< data.size(); i++){
+      if( data.get(i)< 0 ) negatives.add(data.get(i)* -1);
+        else{
+          positives.add(data.get(i));
+        }
+    }
+    radixSortSimple(positives);
+    radixSortSimple(negatives);
+    for(int k=data.size()-1; k>=0; k--){
+      data.remove(k);
+    }
+
+    for(int k=negatives.size()-1; k>=0; k--){
+      data.add(negatives.get(k) * -1);
+    }
+    data.extend(positives);
+  }
+
 
 }
