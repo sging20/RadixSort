@@ -6,29 +6,17 @@ public class Radix{
     return ret;
 }
 public static int length(int n){
-  int counter= 1;
-  while(n / (int) 10 != 0){
-  n= n/ (int)10;
-  counter += 1;
-  }
-  return counter;
+  int ret= ((int) Math.log(n))+1;
+  return ret;
 }
 
-public static void merge( SortableLinkedList original, SortableLinkedList[]buckets){
+public static void merge( SortableLinkedList original, SortableLinkedList[]buckets){ //good
   for(int i=0; i< buckets.length; i++){
     original.extend(buckets[i]);
   }
 }
 
 public static void radixSortSimple(SortableLinkedList data){
-  int max=0;
-  for(int i=0; i< data.size(); i++){
-    if(data.get(i) > max){
-      max= data.get(i);
-    }
-  }
-  int count= length(max);
-    for(int i=0; i< count; i++){
         SortableLinkedList bucket0= new SortableLinkedList();
         SortableLinkedList bucket1= new SortableLinkedList();
         SortableLinkedList bucket2= new SortableLinkedList();
@@ -40,51 +28,51 @@ public static void radixSortSimple(SortableLinkedList data){
         SortableLinkedList bucket8= new SortableLinkedList();
         SortableLinkedList bucket9= new SortableLinkedList();
 
-    for(int j=0; j< data.size(); j++){
-      int test= data.get(j);
-      test= nth(test, i);
-      if(test == 0) bucket0.add(data.get(j));
-          else if(test == 1) bucket1.add(data.get(j));
-          else if(test == 2) bucket2.add(data.get(j));
-          else if(test == 3) bucket3.add(data.get(j));
-          else if(test == 4) bucket4.add(data.get(j));
-          else if(test == 5) bucket5.add(data.get(j));
-          else if(test == 6) bucket6.add(data.get(j));
-          else if(test == 7) bucket7.add(data.get(j));
-          else if(test == 8) bucket8.add(data.get(j));
-          else if(test == 9) bucket9.add(data.get(j));
-      }
-      SortableLinkedList[]buckets= {bucket1, bucket2, bucket3, bucket4, bucket5, bucket6, bucket7, bucket8, bucket9};
-      Radix.merge(bucket0, buckets);
+SortableLinkedList[]buckets= {bucket0, bucket1, bucket2, bucket3, bucket4, bucket5, bucket6, bucket7, bucket8, bucket9};
+    int max=0;
+   while(data.size() != 0){
+    int current= data.remove(0);
+    if(current > max){
+      max= current;
+    }
+    int inserthere= (int) current%10;
+    buckets[inserthere].add(current);
+  }
+  merge(data, buckets);
+  int highestdigit= length(max);
 
+    for(int i=0; i< highestdigit-1; i++){
+      while(data.size() != 0) {
+       int current= data.remove(0);
+       int insert= nth(current, i+1);
+       buckets[insert].add(current);
+     }
+     merge(data, buckets);
+}
+}
+
+
+
+public static void radixSort(SortableLinkedList data){
+  SortableLinkedList negatives= new SortableLinkedList();
+  SortableLinkedList positives= new SortableLinkedList();
+  for(int i=0; i< data.size(); i++){
+    if( data.get(i)< 0 ) negatives.add(data.get(i)* -1);
+      else{
+        positives.add(data.get(i));
+      }
+  }
+  radixSortSimple(positives);
+  radixSortSimple(negatives);
   for(int k=data.size()-1; k>=0; k--){
     data.remove(k);
   }
-  data.extend(bucket0);
-}
-}
 
-
-  public static void radixSort(SortableLinkedList data){
-    SortableLinkedList negatives= new SortableLinkedList();
-    SortableLinkedList positives= new SortableLinkedList();
-    for(int i=0; i< data.size(); i++){
-      if( data.get(i)< 0 ) negatives.add(data.get(i)* -1);
-        else{
-          positives.add(data.get(i));
-        }
-    }
-    radixSortSimple(positives);
-    radixSortSimple(negatives);
-    for(int k=data.size()-1; k>=0; k--){
-      data.remove(k);
-    }
-
-    for(int k=negatives.size()-1; k>=0; k--){
-      data.add(negatives.get(k) * -1);
-    }
-    data.extend(positives);
+  for(int k=negatives.size()-1; k>=0; k--){
+    data.add(negatives.get(k) * -1);
   }
+  data.extend(positives);
+}
 
 
 }
