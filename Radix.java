@@ -30,24 +30,17 @@ public static void radixSortSimple(SortableLinkedList data){
 
 SortableLinkedList[]buckets= {bucket0, bucket1, bucket2, bucket3, bucket4, bucket5, bucket6, bucket7, bucket8, bucket9};
     int max=0;
+    int highestdigit= 1;
+    for(int i=0; i< highestdigit; i++){
    while(data.size() != 0){
     int current= data.remove(0);
-    if(current > max){
-      max= current;
+    if(length(current) > highestdigit){
+      highestdigit= length(current);
     }
-    int inserthere= (int) current%10;
+    int inserthere= nth(current, i);
     buckets[inserthere].add(current);
   }
   merge(data, buckets);
-  int highestdigit= length(max);
-
-    for(int i=0; i< highestdigit-1; i++){
-      while(data.size() != 0) {
-       int current= data.remove(0);
-       int insert= nth(current, i+1);
-       buckets[insert].add(current);
-     }
-     merge(data, buckets);
 }
 }
 
